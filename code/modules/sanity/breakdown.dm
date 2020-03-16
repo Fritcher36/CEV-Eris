@@ -38,6 +38,8 @@
 	holder.owner << img
 	flick(icon_state, img)
 	holder.owner.playsound_local(get_turf(holder.owner), breakdown_sound, 100)
+	to_chat(holder.owner, SPAN_NOTICE("Something is happening inside your head. You can feel it..."))
+	sleep(100)
 	if(start_messages)
 		to_chat(holder.owner, span(start_message_span, pick(start_messages)))
 	if(restore_sanity_pre)
