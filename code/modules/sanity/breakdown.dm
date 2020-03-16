@@ -59,3 +59,9 @@
 	if(restore_sanity_post)
 		holder.restoreLevel(restore_sanity_post)
 	qdel(src)
+
+/datum/breakdwon/proc/fail()
+	log_and_message_admins("[holder.owner] is no longer affected by [name]")
+	to_chat(holder.owner, SPAN_NOTICE("I failed. I feel... empty."))
+	holder.restoreLevel(-20)
+	qdel(src)

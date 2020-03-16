@@ -220,3 +220,18 @@
 	M.stats.addTempStat(STAT_TGH, -STAT_LEVEL_BASIC, STIM_TIME, "sanguinum_w")
 	M.stats.addTempStat(STAT_COG, -STAT_LEVEL_BASIC, STIM_TIME, "sanguinum_w")
 	M.stats.addTempStat(STAT_ROB, -STAT_LEVEL_BASIC, STIM_TIME, "sanguinum_w")
+
+
+/datum/reagent/drug/mindwipe
+	name = "Mindwipe"
+	id = "mindwipe"
+	description = "Strong drug that helps you to forget."
+	taste_description = "acid"
+	reagent_state - LIQUID
+	color = "#FFFFFF"
+	metabolism = REM
+	overdose = REAGENTS_OVERDOSE/5
+	nerve_systen_accumulations = 95
+	addiction_chance = 40
+
+/datum/reagent/drug/mindwipe/affect_blood(mob/living/carbon/M, alien, effect_multiplier)
