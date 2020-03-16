@@ -56,7 +56,6 @@
 	switched_on_qualities = list(QUALITY_DIGGING = 40, QUALITY_PRYING = 20)
 	glow_color = COLOR_BLUE_LIGHT
 	degradation = 0.6
-	max_upgrades = 2
 	workspeed = 1.2
 	use_power_cost = 0
 
@@ -111,7 +110,7 @@
 	matter = list(MATERIAL_STEEL = 8, MATERIAL_PLASTIC = 2)
 	origin_tech = list(TECH_MATERIAL = 2, TECH_POWER = 3, TECH_ENGINEERING = 2)
 	degradation = 0.7
-	use_fuel_cost = 0.15
+	use_fuel_cost = 0.07
 	max_fuel = 100
 
 /obj/item/weapon/tool/pickaxe/drill/onestar
@@ -126,7 +125,7 @@
 	degradation = 0.6
 	workspeed = 1.7
 	max_upgrades = 2
-	use_fuel_cost = 0.2
+	use_fuel_cost = 0.10
 	max_fuel = 90
 
 /obj/item/weapon/tool/pickaxe/diamonddrill
@@ -142,7 +141,7 @@
 	origin_tech = list(TECH_MATERIAL = 6, TECH_POWER = 4, TECH_ENGINEERING = 5)
 	max_upgrades = 4
 	degradation = 0.1
-	use_fuel_cost = 0.15
+	use_fuel_cost = 0.07
 	max_fuel = 120
 
 /obj/item/weapon/tool/pickaxe/diamonddrill/rig

@@ -18,6 +18,7 @@
 	var/list/grenades = new/list()
 	var/max_grenades = 5 //holds this + one in the chamber
 	zoom_factor = 2.0
+	twohanded = TRUE
 
 //revolves the magazine, allowing players to choose between multiple grenade types
 /obj/item/weapon/gun/launcher/grenade/proc/pump(mob/user as mob)
@@ -91,8 +92,8 @@
 	return chambered
 
 /obj/item/weapon/gun/launcher/grenade/handle_post_fire(mob/user)
-	message_admins("[key_name_admin(user)] fired a grenade ([chambered.name]) from a grenade launcher ([src.name]).")
-	log_game("[key_name_admin(user)] used a grenade ([chambered.name]).")
+	log_and_message_admins("fired a grenade ([chambered.name]) from a grenade launcher ([src.name]).")
+	user.attack_log += "\[[time_stamp()]\] <font color='red'> fired a grenade ([chambered.name]) from a grenade launcher ([src.name])</font>"
 	chambered = null
 	pump(user)
 
@@ -105,7 +106,7 @@
 	force = 5
 	max_grenades = 0
 	safety = FALSE
-
+	twohanded = FALSE
 /obj/item/weapon/gun/launcher/grenade/underslung/attack_self()
 	return
 

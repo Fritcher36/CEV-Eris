@@ -51,7 +51,7 @@
 	var/suit_type = "hardsuit"
 	var/list/initial_modules = list()
 	var/chest_type = /obj/item/clothing/suit/space/rig
-	var/helm_type =  /obj/item/clothing/head/helmet/space/rig
+	var/helm_type =  /obj/item/clothing/head/space/rig
 	var/boot_type =  /obj/item/clothing/shoes/magboots/rig
 	var/glove_type = /obj/item/clothing/gloves/rig
 	var/cell_type =  /obj/item/weapon/cell/large/high
@@ -61,7 +61,7 @@
 	var/obj/item/weapon/tank/air_supply                       // Air tank, if any.
 	var/obj/item/clothing/shoes/boots = null                  // Deployable boots, if any.
 	var/obj/item/clothing/suit/space/rig/chest                // Deployable chestpiece, if any.
-	var/obj/item/clothing/head/helmet/space/rig/helmet = null // Deployable helmet, if any.
+	var/obj/item/clothing/head/space/rig/helmet = null // Deployable helmet, if any.
 	var/obj/item/clothing/gloves/rig/gloves = null            // Deployable gauntlets, if any.
 	var/obj/item/weapon/cell/large/cell                             // Power supply, if any.
 	var/obj/item/rig_module/selected_module = null            // Primary system (used with middle-click)
@@ -113,8 +113,7 @@
 		return visor.vision.glasses
 
 /obj/item/weapon/rig/examine()
-	to_chat(usr, "This is \icon[src][src.name].")
-	to_chat(usr, "[src.desc]")
+	..()
 	if(wearer)
 		for(var/obj/item/piece in list(helmet,gloves,chest,boots))
 			if(!piece || piece.loc != wearer)
@@ -125,8 +124,8 @@
 		to_chat(usr, "The maintenance panel is [open ? "open" : "closed"].")
 		to_chat(usr, "Hardsuit systems are [offline ? "<font color='red'>offline</font>" : "<font color='green'>online</font>"].")
 
-/obj/item/weapon/rig/New()
-	..()
+/obj/item/weapon/rig/Initialize()
+	. = ..()
 
 	item_state = icon_state
 	wires = new(src)
@@ -136,7 +135,7 @@
 		allowed |= extra_allowed
 
 	if((!req_access || !req_access.len) && (!req_one_access || !req_one_access.len))
-		locked = 0
+		locked = FALSE
 
 	spark_system = new()
 	spark_system.set_up(5, 0, src)
@@ -960,6 +959,48 @@
 		air_supply.remove_air(air_supply.air_contents.total_moles)
 	else
 		QDEL_NULL(air_supply)
+
+/obj/item/weapon/rig/clean_blood()
+	..()
+	if(chest)
+		chest.clean_blood()
+	if(boots)
+		boots.clean_blood()
+	if(helmet)
+		helmet.clean_blood()
+	if(gloves)
+		gloves.clean_blood()
+	var/obj/glasses = getCurrentGlasses()
+	if(glasses)
+		glasses.clean_blood()
+
+/obj/item/weapon/rig/decontaminate()
+	..()
+	if(chest)
+		chest.decontaminate()
+	if(boots)
+		boots.decontaminate()
+	if(helmet)
+		helmet.decontaminate()
+	if(gloves)
+		gloves.decontaminate()
+	var/obj/item/glasses = getCurrentGlasses()
+	if(glasses)
+		glasses.decontaminate()
+
+/obj/item/weapon/rig/make_young()
+	..()
+	if(chest)
+		chest.make_young()
+	if(boots)
+		boots.make_young()
+	if(helmet)
+		helmet.make_young()
+	if(gloves)
+		gloves.make_young()
+	var/obj/glasses = getCurrentGlasses()
+	if(glasses)
+		glasses.make_young()
 
 #undef ONLY_DEPLOY
 #undef ONLY_RETRACT

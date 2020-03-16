@@ -1,15 +1,15 @@
-/obj/item/clothing/head/helmet/space/void/SCAF
+/obj/item/clothing/head/space/void/SCAF
 	name = "SCAF helmet"
 	desc = "A thick airtight helmet designed for planetside warfare retrofitted with seals to act like normal space suit helmet."
 	icon_state = "scaf"
 	item_state = "scaf"
 	armor = list(
 		melee = 60,
-		bullet = 55,
-		energy = 50,
+		bullet = 65,
+		energy = 60,
 		bomb = 75,
 		bio = 100,
-		rad = 25
+		rad = 30
 	)
 	siemens_coefficient = 0.35
 	species_restricted = list("Human")
@@ -21,30 +21,34 @@
 	desc = "A bulky antique suit of refurbished infantry armour, retrofitted with seals and coatings to make it EVA capable but also reducing mobility."
 	icon_state = "scaf"
 	item_state = "scaf"
-	slowdown = 1.3
+	slowdown = 0.5
 	flags_inv = HIDEGLOVES|HIDEJUMPSUIT|HIDETAIL
 	armor = list(
 		melee = 60,
-		bullet = 55,
-		energy = 50,
+		bullet = 65,
+		energy = 60,
 		bomb = 75,
 		bio = 100,
-		rad = 25
+		rad = 30
 	)
 	siemens_coefficient = 0.35
+	breach_threshold = 10
+	resilience = 0.07
 	species_restricted = list("Human")
+	supporting_limbs = list()
+	helmet = /obj/item/clothing/head/space/void/SCAF
 
 
 //Voidsuit for traitors
-/obj/item/clothing/head/helmet/space/void/merc
+/obj/item/clothing/head/space/void/merc
 	name = "blood-red voidsuit helmet"
 	desc = "An advanced helmet designed for work in special operations. This version is additionally reinforced against melee attacks."
 	icon_state = "syndiehelm"
-	item_state = "syndie_helm"
+	item_state = "syndiehelm"
 	armor = list(
 		melee = 50,
 		bullet = 40,
-		energy = 30,
+		energy = 40,
 		bomb = 50,
 		bio = 100,
 		rad = 75
@@ -54,7 +58,7 @@
 	camera_networks = list(NETWORK_MERCENARY)
 	light_overlay = "helmet_light_ihs"
 
-/obj/item/clothing/head/helmet/space/void/merc/update_icon()
+/obj/item/clothing/head/space/void/merc/update_icon()
 	..()
 	if(on)
 		icon_state = "syndiehelm_on"
@@ -70,10 +74,20 @@
 	armor = list(
 		melee = 50,
 		bullet = 40,
-		energy = 30,
+		energy = 40,
 		bomb = 50,
 		bio = 100,
 		rad = 75
 	)
 	siemens_coefficient = 0.35
+	breach_threshold = 8
+	resilience = 0.08
 	species_restricted = list("Human")
+	helmet = /obj/item/clothing/head/space/void/merc
+
+/obj/item/clothing/suit/space/void/merc/equipped
+	boots = /obj/item/clothing/shoes/magboots
+	tank = /obj/item/weapon/tank/oxygen
+
+/obj/item/clothing/suit/space/void/merc/boxed
+	tank = /obj/item/weapon/tank/emergency_oxygen/double

@@ -90,10 +90,10 @@
 	corpseuniform = /obj/item/clothing/under/syndicate
 	corpsesuit = /obj/item/clothing/suit/armor/vest
 	corpseshoes = /obj/item/clothing/shoes/jackboots
-	corpsegloves = /obj/item/clothing/gloves/thick/swat
+	corpsegloves = /obj/item/clothing/gloves/security
 	corpseradio = /obj/item/device/radio/headset
 	corpsemask = /obj/item/clothing/mask/gas
-	corpsehelmet = /obj/item/clothing/head/helmet
+	corpsehelmet = /obj/item/clothing/head/armor/helmet
 	corpseback = /obj/item/weapon/storage/backpack
 	corpseid = 1
 	corpseidjob = "Operative"
@@ -106,10 +106,9 @@
 	corpseuniform = /obj/item/clothing/under/syndicate
 	corpsesuit = /obj/item/clothing/suit/space/void/merc
 	corpseshoes = /obj/item/clothing/shoes/jackboots
-	corpsegloves = /obj/item/clothing/gloves/thick/swat
+	corpsegloves = /obj/item/clothing/gloves/security
 	corpseradio = /obj/item/device/radio/headset
 	corpsemask = /obj/item/clothing/mask/gas/syndicate
-	corpsehelmet = /obj/item/clothing/head/helmet/space/void/merc
 	corpseback = /obj/item/weapon/tank/jetpack/oxygen
 	corpsepocket1 = /obj/item/weapon/tank/emergency_oxygen
 	corpseid = 1
@@ -139,7 +138,6 @@
 /obj/landmark/corpse/engineer/rig
 	corpsesuit = /obj/item/clothing/suit/space/void/engineering
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/void/engineering
 
 /obj/landmark/corpse/clown
 	name = "Clown"
@@ -166,7 +164,6 @@
 /obj/landmark/corpse/miner/rig
 	corpsesuit = /obj/item/clothing/suit/space/void/mining
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/void/mining
 
 
 /////////////////Officers//////////////////////
@@ -190,7 +187,7 @@
 	corpseglasses = /obj/item/clothing/glasses/eyepatch
 	corpsemask = /obj/item/clothing/mask/smokable/cigarette/cigar/cohiba
 	corpsehelmet = /obj/item/clothing/head/centhat
-	corpsegloves = /obj/item/clothing/gloves/thick/swat
+	corpsegloves = /obj/item/clothing/gloves/security
 	corpseshoes = /obj/item/clothing/shoes/jackboots
 	corpsepocket1 = /obj/item/weapon/flame/lighter/zippo
 	corpseid = 1

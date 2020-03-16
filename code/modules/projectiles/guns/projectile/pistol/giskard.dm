@@ -1,12 +1,12 @@
 /obj/item/weapon/gun/projectile/giskard
 	name = "FS HG .35 Auto \"Giskard\""
-	desc = "That's the \"Frozen Star\" popular non-lethal pistol. Can even fit into the pocket! Uses holdout .35 Auto mags."
+	desc = "A popular \"Frozen Star\" brand pocket pistol chambered for the ubiquitous .35 auto round. Uses standard capacity magazines."
 	icon = 'icons/obj/guns/projectile/giskard.dmi'
 	icon_state = "giskard"
 	item_state = "pistol"
 	fire_sound = 'sound/weapons/guns/fire/pistol_fire.ogg'
 	silencer_type = /obj/item/weapon/silencer
-	caliber = "pistol"
+	caliber = CAL_PISTOL
 	w_class = ITEM_SIZE_SMALL
 	can_dual = 1
 	fire_delay = 0.6

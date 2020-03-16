@@ -301,7 +301,7 @@
 	for(var/datum/component/fabric/F in GLOB.fabric_list)
 		if(F.parent == holder.owner)
 			continue
-		add_image(null, F.fabric_image)
+		add_image(F.fabric_image)
 	++holder.owner.language_blackout
 	return ..()
 
@@ -314,7 +314,7 @@
 	images.Cut()
 	..()
 
-/datum/breakdown/negative/fabric/proc/add_image(_, image/I)
+/datum/breakdown/negative/fabric/proc/add_image(image/I)
 	images |= I
 	holder.owner.client?.images |= I
 
@@ -345,10 +345,13 @@
 
 
 
+#define OBSESSION_COOLDOWN rand(30 SECONDS, 120 SECONDS)
+
 /datum/breakdown/common/obsession
 	name = "Obsession"
 	var/obj/item/target
 	var/objectname
+	var/message_time = 0
 
 	start_messages = list(
 		"You hear a sickening, raspy voice in your head. It requires one small task of you...",
@@ -405,7 +408,8 @@
 		holder.restoreLevel(70)
 		conclude()
 		return FALSE
-	if(prob(50))
+	if(world.time >= message_time)
+		message_time = world.time + OBSESSION_COOLDOWN
 		var/message = pick(list(
 			"You knew it. The [objectname] will ease your journey to the stars.",
 			"You look all around, but the only thing you can see is the [objectname].",
@@ -540,6 +544,6 @@
 	UnregisterSignal(holder.owner, COMSIG_HUMAN_SAY)
 	..()
 
-/datum/breakdown/common/signs/proc/check_message(_, msg)
+/datum/breakdown/common/signs/proc/check_message(msg)
 	if(msg == message)
 		finished = TRUE

@@ -17,4 +17,9 @@
 	price_tag = 5000
 	cell_type = /obj/item/weapon/cell/medium
 	zoom_factor = 2.0
-
+	firemodes = list(
+		WEAPON_NORMAL,
+		WEAPON_CHARGE
+	)
+	twohanded = TRUE
+	

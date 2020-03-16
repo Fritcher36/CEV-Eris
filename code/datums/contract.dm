@@ -5,6 +5,7 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 	var/desc
 	var/reward = 0
 	var/completed = FALSE
+	var/datum/mind/completed_by = null
 	var/unique = FALSE
 
 /datum/antag_contract/proc/can_place()
@@ -21,6 +22,11 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 	if(completed)
 		warning("Contract completed twice: [name] [desc]")
 	completed = TRUE
+	completed_by = M
+
+	if(M && M.current)
+		to_chat(M.current, SPAN_NOTICE("Contract completed: [name] ([reward] TC)"))
+
 	for(var/obj/item/device/uplink/U in world_uplinks)
 		if(U.uplink_owner != M)
 			continue
@@ -28,6 +34,7 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 		break
 
 
+// A contract to steal a specific item - allows you to check all contents (recursively) for the target item
 /datum/antag_contract/item
 
 /datum/antag_contract/item/proc/on_container(obj/item/weapon/storage/bsdm/container)
@@ -35,7 +42,25 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 		complete(container.owner)
 
 /datum/antag_contract/item/proc/check(obj/item/weapon/storage/container)
-	warning("Item contract does not implement check(): [name] [desc]")
+	return check_contents(container.GetAllContents(includeSelf = FALSE))
+
+/datum/antag_contract/item/proc/check_contents(list/contents)
+	warning("Item contract does not implement check_contents(): [name] [desc]")
+	return FALSE
+
+
+// A contract to steal a specific file - allows you to check all disks for the target file
+/datum/antag_contract/item/file
+
+/datum/antag_contract/item/file/check_contents(list/contents)
+	var/list/all_files = list()
+	for(var/obj/item/weapon/computer_hardware/hard_drive/H in contents)
+		all_files += H.stored_files
+
+	return check_files(all_files)
+
+/datum/antag_contract/item/file/proc/check_files(list/files)
+	warning("File contract does not implement check_files(): [name] [desc]")
 	return FALSE
 
 
@@ -43,30 +68,40 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 /datum/antag_contract/implant
 	name = "Implant"
 	reward = 14
-	var/mob/living/carbon/human/target
+	var/datum/mind/target_mind
 
 /datum/antag_contract/implant/New()
 	var/list/candidates = SSticker.minds.Copy()
+
+	// Don't target the same player twice
 	for(var/datum/antag_contract/implant/C in GLOB.all_antag_contracts)
-		candidates -= C.target.mind
+		candidates -= C.target_mind
+
 	while(candidates.len)
-		var/datum/mind/target_mind = pick(candidates)
-		var/mob/living/carbon/human/H = target_mind.current
-		if(!istype(H) || H.stat == DEAD)
-			candidates -= target_mind
+		var/datum/mind/candidate_mind = pick(candidates)
+		candidates -= candidate_mind
+
+		// Implant contracts are 75% less likely to target contract-based antags to reduce the amount of cheesy self-implants
+		if((player_is_antag_id(candidate_mind, ROLE_TRAITOR) || player_is_antag_id(candidate_mind, ROLE_CHANGELING)) && prob(75))
 			continue
-		target = H
-		desc = "Implant [target.real_name] with a spying implant."
+
+		// No check for cruciform because the spying implant can bypass it
+		var/mob/living/carbon/human/H = candidate_mind.current
+		if(!istype(H) || H.stat == DEAD || !isOnStationLevel(H))
+			continue
+
+		target_mind = candidate_mind
+		desc = "Implant [H.real_name] with a spying implant."
 		break
 	..()
 
 /datum/antag_contract/implant/can_place()
-	return ..() && target
+	return ..() && target_mind
 
 /datum/antag_contract/implant/proc/check(obj/item/weapon/implant/spying/implant)
 	if(completed)
 		return
-	if(implant.wearer == target)
+	if(implant.wearer && implant.wearer.mind == target_mind)
 		complete(implant.owner)
 
 
@@ -133,7 +168,7 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 	while(candidates.len)
 		target_mind = pick(candidates)
 		var/mob/living/carbon/human/H = target_mind.current
-		if(!istype(H) || H.stat == DEAD)
+		if(!istype(H) || H.stat == DEAD || !isOnStationLevel(H))
 			candidates -= target_mind
 			continue
 		target = H.get_core_implant(/obj/item/weapon/implant/core_implant/cruciform)
@@ -145,8 +180,8 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 /datum/antag_contract/item/assasinate/can_place()
 	return ..() && target
 
-/datum/antag_contract/item/assasinate/check(obj/item/weapon/storage/container)
-	return target in container
+/datum/antag_contract/item/assasinate/check_contents(list/contents)
+	return target in contents
 
 
 /datum/antag_contract/item/steal
@@ -164,7 +199,6 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 		"a functional AI" = /obj/item/device/aicard,
 		"the Technomancer Exultant's advanced voidsuit control module" = /obj/item/weapon/rig/ce,
 		"the station blueprints" = /obj/item/blueprints,
-		"a nasa voidsuit" = /obj/item/clothing/suit/space/void,
 		"a sample of slime extract" = /obj/item/slime_extract,
 		"a piece of corgi meat" = /obj/item/weapon/reagent_containers/food/snacks/meat/corgi,
 		"a Moebius expedition overseer's jumpsuit" = /obj/item/clothing/under/rank/expedition_overseer,
@@ -192,15 +226,15 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 /datum/antag_contract/item/steal/can_place()
 	return ..() && target_type
 
-/datum/antag_contract/item/steal/check(obj/item/weapon/storage/container)
-	return locate(target_type) in container
+/datum/antag_contract/item/steal/check_contents(list/contents)
+	return locate(target_type) in contents
 
 
 /datum/antag_contract/item/steal/docs
 	unique = TRUE
 	reward = 12
 	target_type = /obj/item/weapon/oddity/secdocs
-	desc = "Steal the secret documents and send them via BSDM."
+	desc = "Steal a folder of secret documents and send them via BSDM."
 
 
 /datum/antag_contract/item/dump
@@ -214,9 +248,9 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 	sum = rand(30, 40) * 500
 	desc = "Extract a sum of [sum] credits from Eris economy and send it via BSDM."
 
-/datum/antag_contract/item/dump/check(obj/item/weapon/storage/container)
+/datum/antag_contract/item/dump/check_contents(list/contents)
 	var/received = 0
-	for(var/obj/item/weapon/spacecash/cash in container)
+	for(var/obj/item/weapon/spacecash/cash in contents)
 		received += cash.worth
 	return received >= sum
 
@@ -232,9 +266,9 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 	count = rand(3, 6)
 	desc = "Send blood samples of [count] different people in separate containers via BSDM."
 
-/datum/antag_contract/item/blood/check(obj/item/weapon/storage/container)
+/datum/antag_contract/item/blood/check_contents(list/contents)
 	var/list/samples = list()
-	for(var/obj/item/weapon/reagent_containers/C in container)
+	for(var/obj/item/weapon/reagent_containers/C in contents)
 		var/list/data = C.reagents?.get_data("blood")
 		if(!data || data["species"] != "Human" || data["blood_DNA"] in samples)
 			continue
@@ -244,34 +278,34 @@ GLOBAL_LIST_EMPTY(all_antag_contracts)
 	return FALSE
 
 
-/datum/antag_contract/item/research
+
+/datum/antag_contract/item/file/research
 	name = "Steal research"
 	unique = TRUE
 	reward = 6
 	var/list/targets = list()
 	var/static/counter = 0
 
-/datum/antag_contract/item/research/New()
+/datum/antag_contract/item/file/research/New()
 	..()
 	var/list/candidates = SSresearch.all_designs.Copy()
-	for(var/datum/antag_contract/item/research/C in GLOB.all_antag_contracts)
+	for(var/datum/antag_contract/item/file/research/C in GLOB.all_antag_contracts)
 		candidates -= C.targets
 	while(candidates.len && targets.len < 8)
 		var/datum/design/D = pick(candidates)
 		targets += D
 		candidates -= D
-	desc = "Send a disk with one of the following designs via BSDM: [english_list(targets, and_text = " or ")]."
+	desc = "Send a disk with one of the following designs via BSDM:<br>[english_list(targets, and_text = " or ")]."
 
-/datum/antag_contract/item/research/can_place()
+/datum/antag_contract/item/file/research/can_place()
 	return ..() && targets.len && counter < 3
 
-/datum/antag_contract/item/research/place()
+/datum/antag_contract/item/file/research/place()
 	..()
 	++counter
 
-/datum/antag_contract/item/research/check(obj/item/weapon/storage/container)
-	for(var/obj/item/weapon/computer_hardware/hard_drive/H in container)
-		for(var/datum/computer_file/binary/design/D in H.stored_files)
-			if(D.design in targets)
-				return TRUE
+/datum/antag_contract/item/file/research/check_files(list/files)
+	for(var/datum/computer_file/binary/design/D in files)
+		if(!D.copy_protected && (D.design in targets))
+			return TRUE
 	return FALSE

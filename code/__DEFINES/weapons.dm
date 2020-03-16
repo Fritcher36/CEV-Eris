@@ -42,15 +42,27 @@
 #define STRUCTURE_DAMAGE_BLUNT 			1.3
 #define STRUCTURE_DAMAGE_HEAVY 			1.5
 #define STRUCTURE_DAMAGE_BREACHING 		1.8
+#define STRUCTURE_DAMAGE_DESTRUCTIVE 	2.0
 #define STRUCTURE_DAMAGE_BORING 		3
 
 //Quick defines for fire modes
-#define FULL_AUTO_250		list(mode_name="full auto",  mode_type = /datum/firemode/automatic, fire_delay=2.4, icon="auto")
+#define FULL_AUTO_300		list(mode_name="full auto",  mode_type = /datum/firemode/automatic, fire_delay=2  , icon="auto")
 #define FULL_AUTO_400		list(mode_name="full auto",  mode_type = /datum/firemode/automatic, fire_delay=1.5, icon="auto")
 #define FULL_AUTO_600		list(mode_name="full auto",  mode_type = /datum/firemode/automatic, fire_delay=1  , icon="auto")
+#define FULL_AUTO_800		list(mode_name="full auto",  mode_type = /datum/firemode/automatic, fire_delay=0.8, icon="auto")
 
 #define SEMI_AUTO_NODELAY	list(mode_name="semiauto", burst=1, fire_delay=0, move_delay=null, icon="semi")
 
 #define BURST_3_ROUND		list(mode_name="3-round bursts", burst=3, fire_delay=null, move_delay=4, icon="burst")
 #define BURST_5_ROUND		list(mode_name="5-round bursts", burst=5, fire_delay=null, move_delay=6, icon="burst")
 #define BURST_8_ROUND		list(mode_name="8-round bursts", burst=8, fire_delay=null, move_delay=8, icon="burst")
+
+#define WEAPON_NORMAL		list(mode_name="standard", icon="semi")
+#define WEAPON_CHARGE		list(mode_name="charge mode", mode_type = /datum/firemode/charge, icon="charge")
+
+#define BASE_ACCURACY_REGEN 0.75 //Recoil reduction per ds with 0 VIG
+#define VIG_ACCURACY_REGEN  0.015 //Recoil reduction per ds per VIG
+#define MIN_ACCURACY_REGEN  0.4 //How low can we get with negative VIG
+#define MAX_ACCURACY_OFFSET  75 //It's both how big gun recoil can build up, and how hard you can miss
+
+#define VIG_OVERCHARGE_GEN 0.05

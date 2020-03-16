@@ -2,6 +2,7 @@
  * Contains:
  *		First Aid Kits
  * 		Pill Bottles
+ *		Portable Freezer
  */
 
 /*
@@ -56,7 +57,7 @@
 	item_state = "firstaid-toxin"
 
 /obj/item/weapon/storage/firstaid/toxin/populate_contents()
-	icon_state = pick("antitoxin","antitoxfirstaid","antitoxfirstaid2","antitoxfirstaid3")
+	icon_state = pick("antitoxin","antitoxfirstaid2","antitoxfirstaid3")
 
 	if (empty) return
 	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
@@ -127,7 +128,7 @@
 	can_hold = list(
 		/obj/item/weapon/tool/bonesetter,
 		/obj/item/weapon/tool/cautery,
-		/obj/item/weapon/tool/saw/circular,
+		/obj/item/weapon/tool/saw,
 		/obj/item/weapon/tool/hemostat,
 		/obj/item/weapon/tool/retractor,
 		/obj/item/weapon/tool/scalpel,
@@ -147,6 +148,21 @@
 	new /obj/item/weapon/tool/scalpel(src)
 	new /obj/item/weapon/tool/surgicaldrill(src)
 	new /obj/item/stack/medical/advanced/bruise_pack(src)
+	make_exact_fit()
+
+/obj/item/weapon/storage/firstaid/surgery/traitor/populate_contents()
+	if (empty) return
+	new /obj/item/weapon/tool/bonesetter(src)
+	new /obj/item/weapon/tool/cautery(src)
+	new /obj/item/weapon/tool/saw/circular/advanced(src)
+	new /obj/item/weapon/tool/hemostat(src)
+	new /obj/item/weapon/tool/retractor(src)
+	new /obj/item/weapon/tool/scalpel/advanced(src)
+	new /obj/item/weapon/tool/surgicaldrill(src)
+	new /obj/item/device/scanner/health(src)
+	new /obj/item/stack/medical/advanced/bruise_pack(src)
+	new /obj/item/weapon/storage/pill_bottle/tramadol(src)
+	new /obj/item/weapon/storage/pill_bottle/prosurgeon(src)
 	make_exact_fit()
 
 /*
@@ -298,3 +314,37 @@
 	new /obj/item/weapon/reagent_containers/pill/citalopram(src)
 	new /obj/item/weapon/reagent_containers/pill/citalopram(src)
 	new /obj/item/weapon/reagent_containers/pill/citalopram(src)
+
+/obj/item/weapon/storage/pill_bottle/prosurgeon
+	name = "bottle of ProSurgeon pills"
+	desc = "Contains pills used to reduce hand tremor."
+
+/obj/item/weapon/storage/pill_bottle/prosurgeon/populate_contents()
+	new /obj/item/weapon/reagent_containers/pill/prosurgeon(src)
+	new /obj/item/weapon/reagent_containers/pill/prosurgeon(src)
+	new /obj/item/weapon/reagent_containers/pill/prosurgeon(src)
+	new /obj/item/weapon/reagent_containers/pill/prosurgeon(src)
+	new /obj/item/weapon/reagent_containers/pill/prosurgeon(src)
+	new /obj/item/weapon/reagent_containers/pill/prosurgeon(src)
+	new /obj/item/weapon/reagent_containers/pill/prosurgeon(src)
+
+/*
+ * Portable Freezers
+ */
+/obj/item/weapon/storage/freezer
+	name = "portable freezer"
+	desc = "This nifty shock-resistant device will keep your 'groceries' nice and non-spoiled."
+	icon_state = "freezer"
+	item_state = "medicalpack"
+	max_w_class = ITEM_SIZE_NORMAL
+	matter = list(MATERIAL_STEEL = 1, MATERIAL_PLASTIC = 2)
+	can_hold = list(/obj/item/organ, /obj/item/weapon/reagent_containers/food, /obj/item/weapon/reagent_containers/glass)
+	max_storage_space = DEFAULT_NORMAL_STORAGE
+	use_to_pickup = TRUE
+
+/obj/item/weapon/storage/freezer/medical
+	name = "organ freezer"
+	icon_state = "freezer_red"
+	item_state = "medicalpack"
+	matter = list(MATERIAL_PLASTEEL = 1, MATERIAL_PLASTIC = 2)
+	max_storage_space = DEFAULT_NORMAL_STORAGE * 1.25
